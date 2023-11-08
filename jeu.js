@@ -1,5 +1,9 @@
 "use strict";
 
+const PieceEnum = Object.freeze({"white":0, "black":1, });//freeze pour pas changer les proprietés
+const PieceColors = ["white", "black"];//tableau avec les couleurs des pieces
+
+//classe pour counstruire la grille 
 class ReversiGrille {
 
 // Constantes pour la grille.
@@ -68,3 +72,51 @@ createGameBoard() {
 // La suite étant que cette étape se fera ailleurs automatiquement dans l'initialisation du jeu.
 const reversiGrid = new ReversiGrille();
 reversiGrid.displayGameBoard();
+
+//classe pour le jeu 
+class Reversi{
+
+    constructor(){
+
+    }
+
+   getMove(){
+    //var clickedPiece = this.pieces[i][j];
+    //var clickedLocation = [i, j];
+
+    //console.log("Location Clicked: " + i + ", "+ j);
+   }
+
+}
+
+//classe pour les pieces 
+
+class Pieces{
+
+    constructor(type,local){
+
+    }
+
+    creerPiece(){
+        if(this.local!=null){
+            this.piece.style.backgroundColor  = this.color;
+        }
+    }
+
+    flipPiece(){
+    //le blanc devient noir et vice-versa
+        if (this.type == PieceEnum.white){
+            this.color = PieceColors[PieceEnum.black];
+            //this.otherColor = PieceColors[PieceEnum.white];
+            this.type = PieceEnum.black;
+        } else {
+            this.color = PieceColors[PieceEnum.white];
+            //this.otherColor = PieceColors[PieceEnum.black];
+            this.type = PieceEnum.white;
+        }
+
+        this.creerPiece; 
+
+    }
+
+}

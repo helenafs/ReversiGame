@@ -158,7 +158,75 @@ function isValidMove(row, col, board, player) {
   }
   
 
-  function makeMove(row, col, board, player) { //TO DO 
+function makeMove(row, col, board, player) {
+  // Liste des directions possibles pour vérifier les pièces adverses dans toutes les directions
+  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+
+  // Parcourt chaque direction pour effectuer le mouvement
+  for (const [dr, dc] of directions) {
+    let r = row + dr;
+    let c = col + dc;
+    let foundOpponentPiece = false;
+
+    // Parcourt les cases dans la direction spécifiée
+    while (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
+      if (board[r][c] === player) {
+        if (foundOpponentPiece) {
+          // Retourne les pièces adverses entre le mouvement et une pièce du joueur
+          let flipRow = row + dr;
+          let flipCol = col + dc;
+
+          while (flipRow !== r || flipCol !== c) {
+            board[flipRow][flipCol] = player;
+            flipRow += dr;
+            flipCol += dc;
+          }
+
+          break;
+        } else {
+          // Si la première pièce rencontrée est du joueur actuel, on arrête la recherche dans cette direction
+          break;
+        }
+      } else if (board[r][c] === 'v') {
+        // Si une case vide est rencontrée, le mouvement n'est pas valide dans cette direction
+        break;
+      } else {
+        // Si une pièce adverse est trouvée, on marque qu'une pièce adverse a été trouvée
+        foundOpponentPiece = true;
+      }
+
+      // Déplace la position dans la direction spécifiée
+      r += dr;
+      c += dc;
+    }
+  }
+
+  // Place la pièce du joueur sur la case du mouvement
+  board[row][col] = player;
+
+  // Met à jour les scores après le mouvement
+  updateScore();
+}
+
+  function updateScore(){
+    let countBlack = 0;
+    let countWhite = 0;
+
+    // Parcourt le plateau pour compter les pièces de chaque joueur
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (currentBoard[i][j] === 'u') {
+        countBlack++;
+      } else if (currentBoard[i][j] === 'o') {
+        countWhite++;
+      }
+    }
+  }
+
+  // Met à jour les scores globaux
+  scoreBlack = countBlack;
+  scoreWhite = countWhite;
+
   }
 
   function checkEndGame(board){ //TO DO 

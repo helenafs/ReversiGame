@@ -1,138 +1,74 @@
-"use strict";
+// Taille du plateau
+const boardSize = 8;
 
+let currentBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill('v'));
 
-//classe pour counstruire la grille 
-class ReversiGrille {
+let currentPlayer = 'u'; // 'u' pour Noir, 'o' pour Blanc
 
-// Constantes pour la grille.
-static gridSize = 8;
-static colors = {white: 'white', black: 'black'};
+// Score des joueurs 
+let scoreBlack = 0;
+let scoreWhite = 0;
 
-// Nous initialisons l'élément du plateau de jeu dans le constructeur.
-// Cela crée le plateau de jeu et stocke l'élément dans this.gameBoardElement.
-constructor() {
-    this.gameBoardElement = this.createGameBoard();
+const CellColors = {
+    pair: 'green',        // Couleur pour les cases paires.
+    impair: 'darkgreen',  // Couleur pour les cases impaires.
+  };
+  
+// Fonction pour initialiser le plateau de jeu 
+function initializeBoard() {
+  const boardElement = document.getElementById('board');
+  boardElement.innerHTML = '';
+  
+  // Création des cellules du tableau 
+  for (let i = 0; i < boardSize; i++) {
+    const row = document.createElement('tr');
+    for (let j = 0; j < boardSize; j++) {
+      const cell = document.createElement('td');
+      cell.addEventListener('click', () => handleCellClick(i, j));
+
+      // En fonction de sa position une couleur est associé à une case.
+      const color = (i + j) % 2 === 0 ? CellColors.pair : CellColors.impair; // Vert clair ou Vert foncé
+      cell.style.backgroundColor = color;
+
+      row.appendChild(cell);
+    }
+    boardElement.appendChild(row);
+  }
+
+  // Placez les pièces initiales au centre du plateau
+  currentBoard[3][3] = 'o';
+  currentBoard[3][4] = 'u';
+  currentBoard[4][3] = 'u';
+  currentBoard[4][4] = 'o';
+  
+
+  // Mise à jour du tableau et du statut. 
+  updateBoardVisual();
+  updateStatus();
 }
 
-// Cette méthode crée et retourne l'élément du plateau de jeu.
-createGameBoard() {
-    const gameBoard = document.createElement('div');
-    gameBoard.className = 'game-board';
+// Fonction pour mettre à jour l'affichage du tableau 
+function updateBoardVisual() {
+  const boardElement = document.getElementById('board');
 
-    for (let row = 0; row < ReversiGrille.gridSize; row++) {
-        for (let column = 0; column < ReversiGrille.gridSize; column++) {
-            // Crée un élément de cellule pour chaque case de la grille.
-            const cellElement = document.createElement('div');
-            cellElement.className = 'cell';
-            cellElement.id = `cell-${row}-${column}`; // Attribution de l'identifiant unique
-            
-            // Crée un élément pour représenter une pièce dans la cellule.
-            const pieceElement = document.createElement('div');
-            pieceElement.className = 'piece';
-
-        // Classes pour les pièces de départ
-        if ((row === 3 && column === 3 ) || (row === 4 && column === 4)){
-            pieceElement.classList.add('white');
-        }
-        else if ((row === 3 && column === 4 ) || (row === 4 && column === 3)){
-            pieceElement.classList.add('black');
-           
-           
-        }
-           
-            cellElement.appendChild(pieceElement);
-            gameBoard.appendChild(cellElement);
-        }
+  // On va parcourir le plateau 
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      const cell = boardElement.rows[i].cells[j];
+      cell.innerHTML = '';
+      
+      // On va créer un élément div pour représenter une pièce blanche 
+      if (currentBoard[i][j] === 'u') {
+        const piece = document.createElement('div');
+        piece.className = 'piece black';
+        cell.appendChild(piece);
+      } 
+      // On va créer un élément div pour représenter une pièce noire 
+      else if (currentBoard[i][j] === 'o') {
+        const piece = document.createElement('div');
+        piece.className = 'piece white';
+        cell.appendChild(piece);
+      }
     }
-
-    return gameBoard;
-}
-
-/* Cette fonction affiche le plateau de jeu dans la page HTML en l'ajoutant à un élément conteneur existant.
-  Si l'élément conteneur n'existe pas, un message d'erreur est affiché dans la console. */
-
-  displayGameBoard() {
-
-    const gameBoardContainer = document.getElementById('game-board');
-    if (gameBoardContainer) {
-      // On ajoute le plateau de jeu à l'élément avec l'ID "game-board" dans la page HTML.
-      gameBoardContainer.appendChild(this.gameBoardElement);
-           
-    }
-    else {
-      console.error("Il n'y a pas d'élément pour contenir le plateau de jeu.")
-    }
-    
-    }
-
-}
-// pour tester si la fonction displayGameBoard fonctionne bien.
-// La suite étant que cette étape se fera ailleurs automatiquement dans l'initialisation du jeu.
-const reversiGrid = new ReversiGrille();
-reversiGrid.displayGameBoard();
-
-
-//classe pour le jeu 
-class Reversi{
-
-    constructor(){
-
-    }
-
-   getMove(){
-    //var clickedPiece = this.pieces[i][j];
-    //var clickedLocation = [i, j];
-
-    //console.log("Location Clicked: " + i + ", "+ j);
-   }
-
-}
-
- 
-//classe pour le jeu 
-class Reversi{
-
-    constructor(){
-
-    }
-
-   getMove(){
-    //var clickedPiece = this.pieces[i][j];
-    //var clickedLocation = [i, j];
-
-    //console.log("Location Clicked: " + i + ", "+ j);
-   }
-
-}
-
-//classe pour les pieces 
-
-class Pieces{
-
-    constructor(type,local){
-
-    }
-
-    creerPiece(){
-        if(this.local!=null){
-            this.piece.style.backgroundColor  = this.color;
-        }
-    }
-
-    flipPiece(){
-    //le blanc devient noir et vice-versa
-        if (this.type == PieceEnum.white){
-            this.color = PieceColors[PieceEnum.black];
-            //this.otherColor = PieceColors[PieceEnum.white];
-            this.type = PieceEnum.black;
-        } else {
-            this.color = PieceColors[PieceEnum.white];
-            //this.otherColor = PieceColors[PieceEnum.black];
-            this.type = PieceEnum.white;
-        }
-
-        this.creerPiece; 
-
-    }
-
+  }
 }

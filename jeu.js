@@ -89,5 +89,54 @@ function updateStatus() {
     scoreWhiteSpan.textContent = scoreWhite;
   }
 
+  function handleCellClick(row, col) {
+    // Vérifie si le mouvement est valide pour le joueur actuel
+    if (isValidMove(row, col, currentBoard, currentPlayer)) {
+      // Effectue le mouvement
+      makeMove(row, col, currentBoard, currentPlayer);
+      
+      // Met à jour la visualisation du plateau et les informations de statut
+      updateBoardVisual();
+      updateStatus();
+  
+      // Vérifie si le jeu est terminé
+      if (checkEndGame(currentBoard)) {
+        alert('Le jeu est terminé!');
+      } else {
+        // Passe au tour suivant en inversant le joueur actuel
+        currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
+      }
+    } else {
+      // Alerte si le mouvement n'est pas valide
+      alert('Coup invalide. Veuillez réessayer.');
+    }
+  }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // Initialiser le plateau au chargement de la page
 window.onload = initializeBoard;

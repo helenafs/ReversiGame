@@ -113,7 +113,50 @@ function updateStatus() {
     }
   }
 
-  function isValidMove(row, col, board, player) { //TO DO
+  function isValidMove(row, col, board, player) { 
+    // Vérifie si un mouvement est valide pour un joueur donné à une position spécifique sur le plateau.
+function isValidMove(row, col, board, player) {
+    // Vérifie si la position est en dehors des limites du plateau ou si la cellule n'est pas vide ('v')
+    if (row < 0 || row >= boardSize || col < 0 || col >= boardSize || board[row][col] !== 'v') {
+      return false;
+    }
+  
+    // Liste des directions possibles pour vérifier les pièces adverses dans toutes les directions
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+  
+    // Parcourt chaque direction pour vérifier la validité du mouvement
+    for (const [dr, dc] of directions) {
+      let r = row + dr;
+      let c = col + dc;
+      let foundOpponentPiece = false;
+  
+      // Parcourt les cases dans la direction spécifiée
+      while (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
+        // Si une pièce du joueur est trouvée après une pièce adverse, le mouvement est valide
+        if (board[r][c] === player) {
+          if (foundOpponentPiece) {
+            return true;
+          } else {
+            // Si la première pièce rencontrée est du joueur actuel, on arrête la recherche dans cette direction
+            break;
+          }
+        } else if (board[r][c] === 'v') {
+          // Si une case vide est rencontrée, le mouvement n'est pas valide dans cette direction
+          break;
+        } else {
+          // Si une pièce adverse est trouvée, on marque qu'une pièce adverse a été trouvée
+          foundOpponentPiece = true;
+        }
+  
+        // Déplace la position dans la direction spécifiée
+        r += dr;
+        c += dc;
+      }
+    }
+  
+    // Si aucune direction n'a rendu le mouvement valide, retourne false
+    return false;
+  }
   }
   
 

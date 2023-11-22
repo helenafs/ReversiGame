@@ -113,8 +113,7 @@ function updateStatus() {
     }
   }
 
-  function isValidMove(row, col, board, player) { 
-    // Vérifie si un mouvement est valide pour un joueur donné à une position spécifique sur le plateau.
+  
 function isValidMove(row, col, board, player) {
     // Vérifie si la position est en dehors des limites du plateau ou si la cellule n'est pas vide ('v')
     if (row < 0 || row >= boardSize || col < 0 || col >= boardSize || board[row][col] !== 'v') {
@@ -156,7 +155,6 @@ function isValidMove(row, col, board, player) {
   
     // Si aucune direction n'a rendu le mouvement valide, retourne false
     return false;
-  }
   }
   
 

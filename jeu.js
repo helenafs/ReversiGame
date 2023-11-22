@@ -236,7 +236,29 @@ function makeMove(row, col, board, player) {
 
 
 
+  // Effectue le mouvement de l'IA en choisissant le meilleur mouvement possible
+function makeAIMove() {
+  // Obtiens le meilleur mouvement de l'IA à partir de la fonction getBestMove
+  const bestMove = getBestMove(currentBoard, 'o');
 
+  // Si un meilleur mouvement est trouvé, effectue ce mouvement sur le plateau
+  if (bestMove) {
+    makeMove(bestMove.row, bestMove.col, currentBoard, 'o');
+  }
+}
+  
+  function getBestMove(board, player) { //TO DO 
+    
+  }
+  
+  function minimax(board, depth, maximizingPlayer) { // TO DO 
+    
+  }
+  
+  function evaluate(board) { // TO DO 
+    
+  }
+  
 
 
 

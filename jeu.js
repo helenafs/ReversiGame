@@ -89,6 +89,7 @@ function updateStatus() {
     scoreWhiteSpan.textContent = scoreWhite;
   }
 
+  // Fonction qui gère le clic sur une cellule du plateau de jeu.
   function handleCellClick(row, col) {
     // Vérifie si le mouvement est valide pour le joueur actuel
     if (isValidMove(row, col, currentBoard, currentPlayer)) {

@@ -1,22 +1,35 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<title>  Jeu Reversi  </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reversi Game</title>
+  <link rel="stylesheet" type="text/css" href="jeu.css">
 </head>
 <body>
-    <h1> Reversi </h1>
 
-<div id = "game-board"> </div>
-<script src = "jeu.js"> </script>
-<link rel="stylesheet" type="text/css" href="styles.css">
+<div class="container">
+  <h2>Reversi </h2>
 
+  <div class="options">
+    <label>
+      <input type="radio" name="player" value="human" checked> Joueur Humain
+    </label>
+    <label>
+      <input type="radio" name="player" value="ai"> Joueur IA
+    </label>
+  </div>
 
+  <div class="status">
+    <p>Joueur en cours : <span id="current-player">Noir</span></p>
+    <p>Score Noir : <span id="score-black">0</span></p>
+    <p>Score Blanc : <span id="score-white">0</span></p>
+  </div>
 
+  <table id="board"></table>
+</div>
+
+<script src="jeu.js"></script>
 
 </body>
-
-
 </html>

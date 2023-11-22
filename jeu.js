@@ -72,3 +72,22 @@ function updateBoardVisual() {
     }
   }
 }
+
+function updateStatus() {
+    // Obtient l'élément span pour le joueur actuel
+    const currentPlayerSpan = document.getElementById('current-player');
+    
+    // Met à jour le texte du joueur actuel en fonction de la valeur de currentPlayer ('u' ou 'o')
+    currentPlayerSpan.textContent = currentPlayer === 'u' ? 'Noir' : 'Blanc';
+  
+    // Obtient les éléments span pour les scores des joueurs noir et blanc
+    const scoreBlackSpan = document.getElementById('score-black');
+    const scoreWhiteSpan = document.getElementById('score-white');
+    
+    // Met à jour les textes des scores avec les valeurs actuelles de scoreBlack et scoreWhite
+    scoreBlackSpan.textContent = scoreBlack;
+    scoreWhiteSpan.textContent = scoreWhite;
+  }
+
+  // Initialiser le plateau au chargement de la page
+window.onload = initializeBoard;

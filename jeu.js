@@ -229,8 +229,20 @@ function makeMove(row, col, board, player) {
 
   }
 
-  function checkEndGame(board){ //TO DO 
-
+  // Vérifie si le jeu est terminé en parcourant le plateau
+  function checkEndGame(board) {
+    // Parcourt le plateau pour chaque case
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        // Si un mouvement est possible pour l'un des joueurs, le jeu n'est pas terminé
+        if (isValidMove(i, j, board, 'u') || isValidMove(i, j, board, 'o')) {
+          return false;
+        }
+      }
+    }
+  
+    // Si aucun mouvement possible pour aucun joueur, le jeu est terminé
+    return true;
   }
 
 

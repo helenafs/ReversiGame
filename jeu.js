@@ -112,10 +112,17 @@ function updateStatus() {
       alert('Coup invalide. Veuillez réessayer.');
     }
   }
+
+  function isValidMove(row, col, board, player) { //TO DO
+  }
   
 
+  function makeMove(row, col, board, player) { //TO DO 
+  }
 
+  function checkEndGame(board){ //TO DO 
 
+  }
 
 
 

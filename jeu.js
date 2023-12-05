@@ -44,6 +44,7 @@ function initializeBoard() {
 
   // Mise à jour du tableau et du statut. 
   updateBoardVisual();
+  highlightCurrentPlayerMoves(); 
   updateStatus();
 }
 
@@ -90,28 +91,73 @@ function updateStatus() {
   }
 
   // Fonction qui gère le clic sur une cellule du plateau de jeu.
-  function handleCellClick(row, col) {
-    // Vérifie si le mouvement est valide pour le joueur actuel
-    if (isValidMove(row, col, currentBoard, currentPlayer)) {
-      // Effectue le mouvement
-      makeMove(row, col, currentBoard, currentPlayer);
-      
-      // Met à jour la visualisation du plateau et les informations de statut
-      updateBoardVisual();
-      updateStatus();
-  
-      // Vérifie si le jeu est terminé
-      if (checkEndGame(currentBoard)) {
-        alert('Le jeu est terminé!');
-      } else {
-        // Passe au tour suivant en inversant le joueur actuel
-        currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
-      }
+function handleCellClick(row, col) {
+  // Vérifie si le mouvement est valide pour le joueur actuel
+  if (isValidMove(row, col, currentBoard, currentPlayer)) {
+    // Effectue le mouvement
+    makeMove(row, col, currentBoard, currentPlayer);
+    
+    // Met à jour la visualisation du plateau et les informations de statut
+    updateBoardVisual();
+
+    // Vérifie si le jeu est terminé
+    if (checkEndGame(currentBoard)) {
+      alert('Le jeu est terminé!');
     } else {
-      // Alerte si le mouvement n'est pas valide
-      alert('Coup invalide. Veuillez réessayer.');
+      // Passe au tour suivant en inversant le joueur actuel
+      currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
+      
+      // Met à jour les cellules cliquables et les mouvements en surbrillance pour le nouveau joueur
+      updateClickableCells();
+      highlightCurrentPlayerMoves();
+    }
+  } else {
+    // Alerte si le mouvement n'est pas valide
+    alert('Coup invalide. Veuillez réessayer.');
+  }
+}
+
+  function updateClickableCells() {
+    const allCells = document.querySelectorAll('td');
+    allCells.forEach(cell => cell.classList.remove('highlight'));
+  
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        const cell = document.querySelector(`#board tr:nth-child(${i + 1}) td:nth-child(${j + 1})`);
+        if (isValidMove(i, j, currentBoard, currentPlayer)) {
+          cell.classList.add('highlight');
+        }
+      }
     }
   }
+  
+  function highlightCurrentPlayerMoves() {
+    console.log(`Mise en évidence des mouvements pour le joueur ${currentPlayer}`);
+    const currentPlayerMoves = [];
+  
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        if (isValidMove(i, j, currentBoard, currentPlayer)) {
+          currentPlayerMoves.push({ row: i, col: j });
+        }
+      }
+    }
+  
+    console.log(`${currentPlayerMoves.length}  mouvements en surbrillance.`);
+  
+    const boardElement = document.getElementById('board');
+    
+    currentPlayerMoves.forEach(move => {
+      const cell = boardElement.rows[move.row].cells[move.col];
+      
+      const circleDiv = document.createElement('div');
+      circleDiv.className = 'circle';
+  
+      
+      cell.appendChild(circleDiv);
+    });
+  }
+
 
   
 function isValidMove(row, col, board, player) {
@@ -259,6 +305,8 @@ function makeAIMove() {
     
   }
   
+
+
   function evaluate(board) { 
     let score = 0;
 

@@ -229,7 +229,16 @@ function makeMove(row, col, board, player) {
 
   }
 
-  function checkEndGame(board){ //TO DO 
+  function checkEndGame(board){ 
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        if (isValidMove(i, j, board, 'u') || isValidMove(i, j, board, 'o')) {
+          return false;
+        }
+      }
+    }
+    getWinner();
+    return true;
 
   }
 
@@ -238,13 +247,8 @@ function makeMove(row, col, board, player) {
 
   // Effectue le mouvement de l'IA en choisissant le meilleur mouvement possible
 function makeAIMove() {
-  // Obtiens le meilleur mouvement de l'IA à partir de la fonction getBestMove
-  const bestMove = getBestMove(currentBoard, 'o');
-
-  // Si un meilleur mouvement est trouvé, effectue ce mouvement sur le plateau
-  if (bestMove) {
-    makeMove(bestMove.row, bestMove.col, currentBoard, 'o');
-  }
+  
+  
 }
   
   function getBestMove(board, player) { //TO DO 
@@ -255,13 +259,36 @@ function makeAIMove() {
     
   }
   
-  function evaluate(board) { // TO DO 
-    
+  function evaluate(board) { 
+    let score = 0;
+
+    // Parcourt toutes les cellules du plateau
+    for (let i = 0; i < boardSize; i++) {
+      for (let j = 0; j < boardSize; j++) {
+        // Incrémente le score pour chaque pièce 'o' (Blanc)
+        // Décrémente le score pour chaque pièce 'u' (Noir)
+        if (board[i][j] === 'o') {
+          score++;
+        } else if (board[i][j] === 'u') {
+          score--;
+        }
+      }
   }
-  
+} 
 
 
 
+function getWinner() {
+  if(checkEndGame()){
+  if (scoreBlack > scoreWhite) {
+    alert('Le joueur Noir a gagné!', '', 'success');
+  } else if (scoreWhite > scoreBlack) {
+    alert('Le joueru Blanc a gagné!', '', 'success');
+  } else {
+    alert('Match nul!', '', 'info');
+  }
+}
+}
 
 
 

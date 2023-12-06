@@ -116,7 +116,6 @@ function updateStatus() {
   }
 
   function handleHumanVsHuman(row, col) {
-    // Votre logique actuelle pour le mode Humain vs Humain
     if (isValidMove(row, col, currentBoard, currentPlayer)) {
       makeMove(row, col, currentBoard, currentPlayer);
       updateBoardVisual();

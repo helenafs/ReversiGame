@@ -4,19 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reversi Game</title>
-  <link rel="stylesheet" type="text/css" href="jeu.css">
+  <link rel="stylesheet" type="text/css" href="jeu.css">    
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="jeu.js"></script>
+
 </head>
 <body>
 
 <div class="container">
-  <h2>Reversi </h2>
+  <h2>Reversi Game</h2>
 
   <div class="options">
     <label>
-      <input type="radio" name="player" value="human" checked> Joueur Humain
+      <input type="radio" name="player" value="humain-humain" checked> Joueur Humain vs Joueur Humain 
     </label>
     <label>
-      <input type="radio" name="player" value="ai"> Joueur IA
+      <input type="radio" name="player" value="humain-ia"> Joueur Humain vs Joueur IA
+    </label>
+    <label>
+      <input type="radio" name="player" value="ia-ia"> Joueur IA vs Joueur IA
     </label>
   </div>
 
@@ -29,7 +35,6 @@
   <table id="board"></table>
 </div>
 
-<script src="jeu.js"></script>
 
 </body>
 </html>

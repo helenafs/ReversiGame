@@ -115,6 +115,25 @@ function updateStatus() {
     updateUI();
   }
 
+  function handleHumanVsHuman(row, col) {
+    // Votre logique actuelle pour le mode Humain vs Humain
+    if (isValidMove(row, col, currentBoard, currentPlayer)) {
+      makeMove(row, col, currentBoard, currentPlayer);
+      updateBoardVisual();
+      updateStatus();
+  
+      if (checkEndGame(currentBoard)) {
+        alert('Le jeu est terminé!');
+      } else {
+        currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
+        updateClickableCells();
+        highlightCurrentPlayerMoves();
+      }
+    } else {
+      alert('Coup invalide. Veuillez réessayer.', '', 'error');
+    }
+  }
+  
 
 
   function updateClickableCells() {

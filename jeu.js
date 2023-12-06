@@ -134,7 +134,25 @@ function updateStatus() {
     }
   }
   
-
+  function handleHumanVsAI(row, col) {
+    // L'humain joue
+    if (isValidMove(row, col, currentBoard, currentPlayer)) {
+      makeMove(row, col, currentBoard, currentPlayer);
+      updateUI();
+  
+      if (checkEndGame(currentBoard)) {
+        alert('Le jeu est terminé!', '', 'info');
+        getWinner();
+      } else {
+        // Changer de joueur avant que l'IA ne joue
+        currentPlayer = 'o';
+        // L'IA joue
+        makeAIMove();
+      }
+    } else {
+      alert('Coup invalide. Veuillez réessayer.', '', 'error');
+    }
+  }
 
   function updateClickableCells() {
     const allCells = document.querySelectorAll('td');

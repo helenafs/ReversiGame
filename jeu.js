@@ -90,32 +90,32 @@ function updateStatus() {
     scoreWhiteSpan.textContent = scoreWhite;
   }
 
-  // Fonction qui gère le clic sur une cellule du plateau de jeu.
-function handleCellClick(row, col) {
-  // Vérifie si le mouvement est valide pour le joueur actuel
-  if (isValidMove(row, col, currentBoard, currentPlayer)) {
-    // Effectue le mouvement
-    makeMove(row, col, currentBoard, currentPlayer);
-    
-    // Met à jour la visualisation du plateau et les informations de statut
+  function updateUI() {
     updateBoardVisual();
-
-    // Vérifie si le jeu est terminé
-    if (checkEndGame(currentBoard)) {
-      alert('Le jeu est terminé!');
-    } else {
-      // Passe au tour suivant en inversant le joueur actuel
-      currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
-      
-      // Met à jour les cellules cliquables et les mouvements en surbrillance pour le nouveau joueur
-      updateClickableCells();
-      highlightCurrentPlayerMoves();
-    }
-  } else {
-    // Alerte si le mouvement n'est pas valide
-    alert('Coup invalide. Veuillez réessayer.');
+    updateStatus();
+    updateClickableCells();
+    highlightCurrentPlayerMoves();
   }
-}
+
+  // Fonction qui gère le clic sur une cellule du plateau de jeu.
+  function handleCellClick(row, col) {
+    const highlightedCells = document.querySelectorAll('.highlight');
+    highlightedCells.forEach(cell => cell.classList.remove('highlight'));
+  
+    if (document.querySelector('input[name="player"]:checked').value === 'humain-humain') {
+      // Mode Humain vs Humain
+      handleHumanVsHuman(row, col);
+    } else if (document.querySelector('input[name="player"]:checked').value === 'humain-ia') {
+      // Mode Humain vs IA
+      handleHumanVsAI(row, col);
+    } else if (document.querySelector('input[name="player"]:checked').value === 'ia-ia') {
+      // Mode IA vs IA
+      handleAIVsAI();
+    }
+    updateUI();
+  }
+
+
 
   function updateClickableCells() {
     const allCells = document.querySelectorAll('td');

@@ -154,6 +154,31 @@ function updateStatus() {
     }
   }
 
+  
+function handleAIVsAI() {
+  // Mode IA vs IA
+  playAIMove();
+
+  function playAIMove() {
+      // Changer de joueur avant que l'IA ne joue
+      currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
+    
+      // L'IA joue
+      makeAIMove();
+      updateUI();
+    
+      if (checkEndGame(currentBoard)) {
+        alert('Le jeu est terminé!', '', 'info');
+        updateClickableCells();
+        highlightCurrentPlayerMoves();
+      } else {
+        setTimeout(playAIMove, 1000);
+      }
+    }
+    
+}
+
+
   function updateClickableCells() {
     const allCells = document.querySelectorAll('td');
     allCells.forEach(cell => cell.classList.remove('highlight'));

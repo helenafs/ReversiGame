@@ -332,7 +332,7 @@ function makeMove(row, col, currentBoard, currentPlayer) {
           // Si la première pièce rencontrée est du joueur actuel, on arrête la recherche dans cette direction
           break;
         }
-      } else if (board[r][c] === 'v') {
+      } else if (currentBoard[r][c] === 'v') {
         // Si une case vide est rencontrée, le mouvement n'est pas valide dans cette direction
         break;
       } else {

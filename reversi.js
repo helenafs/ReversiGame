@@ -1,3 +1,4 @@
+// Constantes globales 
 // Taille du plateau
 const boardSize = 8;
 
@@ -134,24 +135,49 @@ function updateStatus() {
   }
   
   function handleHumanVsAI(row, col) {
-    // L'humain joue
-    if (isValidMove(row, col, currentBoard, currentPlayer)) {
-      makeMove(row, col, currentBoard, currentPlayer);
-      updateUI();
-  
-      if (checkEndGame(currentBoard)) {
-        alert('Le jeu est terminé!', '', 'info');
-        getWinner();
-      } else {
-        // Changer de joueur avant que l'IA ne joue
-        currentPlayer = 'o';
-        // L'IA joue
-        makeAIMove();
-      }
+    
+  // L'humain joue
+  if (isValidMove(row, col, currentBoard, currentPlayer)) {
+    makeMove(row, col, currentBoard, currentPlayer);
+    updateUI();
+
+    if (checkEndGame(currentBoard)) {
+      alert('Le jeu est terminé!', '', 'info');
+      getWinner();
+      stopBackgroundMusic();
     } else {
-      alert('Coup invalide. Veuillez réessayer.', '', 'error');
+      currentPlayer = 'o';
+
+      // L'IA joue après la mise à jour du joueur actuel
+      setTimeout(() => {
+        makeMinimaxAIMove();
+        updateUI();
+
+        if (checkEndGame(currentBoard)) {
+          alert('Le jeu est terminé!', '', 'info');
+          getWinner();
+          stopBackgroundMusic();
+            
+         
+        } else {
+          currentPlayer = 'u';
+          updateClickableCells();
+          highlightCurrentPlayerMoves();
+
+        
+
+          if (!hasValidMoves(currentBoard, currentPlayer)) {
+            alert('Le joueur Noir ne peut plus jouer. Le jeu est terminé!');
+            getWinner();
+            stopBackgroundMusic();
+          }
+        }
+      }, 1200); // Ajout d'un délai avant que l'IA ne joue
     }
+  } else {
+    alert('Coup invalide. Veuillez réessayer.', '', 'error');
   }
+}
 
   
 function handleAIVsAI() {
@@ -221,9 +247,9 @@ function handleAIVsAI() {
 
 
   
-function isValidMove(row, col, board, player) {
+function isValidMove(row, col, currentBoard, currentPlayer) {
     // Vérifie si la position est en dehors des limites du plateau ou si la cellule n'est pas vide ('v')
-    if (row < 0 || row >= boardSize || col < 0 || col >= boardSize || board[row][col] !== 'v') {
+    if (row < 0 || row >= boardSize || col < 0 || col >= boardSize || currentBoard[row][col] !== 'v') {
       return false;
     }
   
@@ -239,14 +265,14 @@ function isValidMove(row, col, board, player) {
       // Parcourt les cases dans la direction spécifiée
       while (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
         // Si une pièce du joueur est trouvée après une pièce adverse, le mouvement est valide
-        if (board[r][c] === player) {
+        if (currentBoard[r][c] === currentPlayer) {
           if (foundOpponentPiece) {
             return true;
           } else {
             // Si la première pièce rencontrée est du joueur actuel, on arrête la recherche dans cette direction
             break;
           }
-        } else if (board[r][c] === 'v') {
+        } else if (currentBoard[r][c] === 'v') {
           // Si une case vide est rencontrée, le mouvement n'est pas valide dans cette direction
           break;
         } else {
@@ -265,7 +291,7 @@ function isValidMove(row, col, board, player) {
   }
   
 
-function makeMove(row, col, board, player) {
+function makeMove(row, col, currentBoard, currentPlayer) {
   // Liste des directions possibles pour vérifier les pièces adverses dans toutes les directions
   const directions = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]];
 
@@ -277,14 +303,14 @@ function makeMove(row, col, board, player) {
 
     // Parcourt les cases dans la direction spécifiée
     while (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
-      if (board[r][c] === player) {
+      if (currentBoard[r][c] === currentPlayer) {
         if (foundOpponentPiece) {
           // Retourne les pièces adverses entre le mouvement et une pièce du joueur
           let flipRow = row + dr;
           let flipCol = col + dc;
 
           while (flipRow !== r || flipCol !== c) {
-            board[flipRow][flipCol] = player;
+            currentBoard[flipRow][flipCol] = currentPlayer;
             flipRow += dr;
             flipCol += dc;
           }
@@ -309,7 +335,7 @@ function makeMove(row, col, board, player) {
   }
 
   // Place la pièce du joueur sur la case du mouvement
-  board[row][col] = player;
+  currentBoard[row][col] = currentPlayer;
 
   // Met à jour les scores après le mouvement
   updateScore();
@@ -336,18 +362,7 @@ function makeMove(row, col, board, player) {
 
   }
 
-  function checkEndGame(board){ 
-    for (let i = 0; i < boardSize; i++) {
-      for (let j = 0; j < boardSize; j++) {
-        if (isValidMove(i, j, board, 'u') || isValidMove(i, j, board, 'o')) {
-          return false;
-        }
-      }
-    }
-    getWinner();
-    return true;
-
-  }
+  
 
 
 
@@ -409,7 +424,18 @@ function getWinner() {
 
 
 
+function checkEndGame(currentBoard){ 
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (isValidMove(i, j, currentBoard, 'u') || isValidMove(i, j, currentBoard, 'o')) {
+        return false;
+      }
+    }
+  }
+  getWinner();
+  return true;
 
+}
 
 
 

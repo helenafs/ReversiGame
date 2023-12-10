@@ -374,7 +374,37 @@ function makeMove(row, col, currentBoard, currentPlayer) {
 
   }
 
-  
+// Effectue un mouvement aléatoire pour l'IA.
+function makeRandomAIMove() {
+  // Obtient la liste des mouvements disponibles pour le joueur actuel
+  const availableMoves = getAvailableMoves(currentBoard, currentPlayer);
+
+  // S'il y a des mouvements disponibles, en choisir un au hasard et le jouer
+  if (availableMoves.length > 0) {
+    const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
+    makeMove(randomMove.row, randomMove.col, currentBoard, currentPlayer);
+  }
+}
+
+//  Renvoie la liste des mouvements possibles pour un joueur donné.
+function getAvailableMoves(currentBoard, player) {
+  const availableMoves = [];
+
+  // Parcourt toutes les cellules du plateau
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      // Vérifie si le mouvement est valide pour le joueur actuel
+      if (isValidMove(i, j, currentBoard, player)) {
+        // Ajoute le mouvement à la liste des mouvements possibles
+        availableMoves.push({ row: i, col: j });
+      }
+    }
+  }
+
+  // Renvoie la liste complète des mouvements possibles
+  return availableMoves;
+}
+
 
 
 

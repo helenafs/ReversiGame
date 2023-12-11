@@ -409,11 +409,7 @@ function getAvailableMoves(currentBoard, player) {
 
 
 
-  // Effectue le mouvement de l'IA en choisissant le meilleur mouvement possible
-function makeAIMove() {
-  
-  
-}
+
   
   function getBestMove(board, player) { //TO DO 
     
@@ -425,7 +421,7 @@ function makeAIMove() {
   
 
 
-  function evaluate(board) { 
+  function evaluate(currentBoard) { 
     let score = 0;
 
     // Parcourt toutes les cellules du plateau

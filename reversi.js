@@ -405,25 +405,6 @@ function makeRandomAIMove() {
 
 
 
-//  Renvoie la liste des mouvements possibles pour un joueur donné.
-function getAvailableMoves(currentBoard, player) {
-  const availableMoves = [];
-
-  // Parcourt toutes les cellules du plateau
-  for (let i = 0; i < boardSize; i++) {
-    for (let j = 0; j < boardSize; j++) {
-      // Vérifie si le mouvement est valide pour le joueur actuel
-      if (isValidMove(i, j, currentBoard, player)) {
-        // Ajoute le mouvement à la liste des mouvements possibles
-        availableMoves.push({ row: i, col: j });
-      }
-    }
-  }
-
-  // Renvoie la liste complète des mouvements possibles
-  return availableMoves;
-}
-
 
 
 
@@ -487,6 +468,38 @@ function minimax(currentBoard, depth, maximizingPlayer) {
     // Retourne la meilleure évaluation obtenue
     return minEval;
   }
+}
+
+
+function hasValidMoves(currentBoard, currentPlayer) {
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (isValidMove(i, j, currentBoard, currentPlayer)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+
+//  Renvoie la liste des mouvements possibles pour un joueur donné.
+function getAvailableMoves(currentBoard, player) {
+  const availableMoves = [];
+
+  // Parcourt toutes les cellules du plateau
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      // Vérifie si le mouvement est valide pour le joueur actuel
+      if (isValidMove(i, j, currentBoard, player)) {
+        // Ajoute le mouvement à la liste des mouvements possibles
+        availableMoves.push({ row: i, col: j });
+      }
+    }
+  }
+
+  // Renvoie la liste complète des mouvements possibles
+  return availableMoves;
 }
 
 

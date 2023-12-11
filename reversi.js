@@ -386,6 +386,25 @@ function makeRandomAIMove() {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //  Renvoie la liste des mouvements possibles pour un joueur donné.
 function getAvailableMoves(currentBoard, player) {
   const availableMoves = [];
@@ -411,14 +430,64 @@ function getAvailableMoves(currentBoard, player) {
 
 
   
-  function getBestMove(board, player) { //TO DO 
-    
-  }
+
   
-  function minimax(board, depth, maximizingPlayer) { // TO DO 
-    
+ // Fonction principale de l'algorithme minimax
+function minimax(currentBoard, depth, maximizingPlayer) {
+  if (depth === 0 || !hasValidMoves(currentBoard, currentPlayer)) {
+    const evaluation = evaluate(currentBoard, depth);
+    console.log('Evaluation at depth', depth, ':', evaluation);
+    return evaluation;
   }
-  
+
+  // Détermine le joueur actuel et son adversaire en fonction du mode de maximisation
+  const player = maximizingPlayer ? 'o' : 'u';
+  const opponent = maximizingPlayer ? 'u' : 'o';
+
+  const availableMoves = getAvailableMoves(currentBoard, player);
+
+  // Si c'est le tour du joueur de maximiser
+  if (maximizingPlayer) {
+    let maxEval = -Infinity; // Initialise la meilleure évaluation à négatif l'infini
+
+    // Parcourt tous les mouvements possibles
+    for (const move of availableMoves) {
+      // Copie le plateau pour simuler le mouvement
+      const tempBoard = JSON.parse(JSON.stringify(currentBoard));
+      // Effectue le mouvement sur la copie du plateau
+      if (makeMove(move.row, move.col, tempBoard, player)) {
+        // Met à jour le score et appelle récursivement minimax avec la profondeur réduite
+        updateScore();
+        const eval = minimax(tempBoard, depth - 1, false);
+        // Met à jour la meilleure évaluation avec le maximum des évaluations obtenues
+        maxEval = Math.max(maxEval, eval);
+      }
+    }
+
+    // Retourne la meilleure évaluation obtenue
+    return maxEval;
+  } else {
+    // Si c'est le tour de l'adversaire de minimiser
+    let minEval = Infinity; // Initialise la meilleure évaluation à l'infini
+
+    // Parcourt tous les mouvements possibles
+    for (const move of availableMoves) {
+      // Copie le plateau pour simuler le mouvement
+      const tempBoard = JSON.parse(JSON.stringify(currentBoard));
+      // Effectue le mouvement sur la copie du plateau
+      if (makeMove(move.row, move.col, tempBoard, opponent)) {
+        // Met à jour le score et appelle récursivement minimax avec la profondeur réduite
+        updateScore();
+        const eval = minimax(tempBoard, depth - 1, true);
+        // Met à jour la meilleure évaluation avec le minimum des évaluations obtenues
+        minEval = Math.min(minEval, eval);
+      }
+    }
+
+    // Retourne la meilleure évaluation obtenue
+    return minEval;
+  }
+}
 
 
   function evaluate(currentBoard) { 

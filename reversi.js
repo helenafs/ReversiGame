@@ -761,5 +761,57 @@ function getMovesByPlayer(currentPlayer, matchNumber) {
 
 
 
-  // Initialiser le plateau au chargement de la page
-window.onload = initializeBoard;
+window.onload = function () {
+  initializeBoard();
+
+  // Fonction pour démarrer le jeu en mode IA vs IA avec le mode sélectionné
+  function startAIVsAI() {
+    const selectedAIMode = document.getElementById('ai-mode').value;
+    initializeBoard();
+    handleAIVsAI(selectedAIMode);
+  
+  //  Pour les test il faut aussi décommenter cette partie, il est possible d'ajuster le nombre de parties que l'on veut tester. 
+  //  let numGames;
+  //  if (selectedAIMode === 'random') {
+  //    numGames = 1000;
+  //  } else if (selectedAIMode === 'minimax') {
+  //    numGames = 1000;
+  //  }
+
+  //  runAITests(numGames);
+   }
+  
+
+  // Ajouter un gestionnaire d'événements au bouton IA vs IA
+  const boutonIA = document.querySelector('input[name="player"][value="ia-ia"]');
+  boutonIA.addEventListener('click', startAIVsAI);
+
+  document.getElementById('newGameButton').addEventListener('click', function () {
+    // Arrête la musique si elle est en cours de lecture
+    stopBackgroundMusic();
+
+    // Réinitialise les variables du jeu
+    currentBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill('v'));
+    currentPlayer = 'u';
+    scoreBlack = 0;
+    scoreWhite = 0;
+
+    // Réinitialise l'interface graphique
+    initializeBoard();
+
+    // Vérifie le mode de jeu et lance la partie correspondante
+    const selectedMode = document.querySelector('input[name="player"]:checked').value;
+    if (selectedMode === 'ia-ia') {
+      // Utilisez la fonction dédiée pour démarrer le jeu en mode IA vs IA
+      startAIVsAI();
+    } else {
+      // Ajoutez des conditions pour les autres modes si nécessaire
+      updateUI(); // Ajoutez cette ligne pour mettre à jour l'interface utilisateur après la réinitialisation du plateau
+    }
+  });
+
+  // Ajout de cette ligne pour démarrer automatiquement le jeu IA vs IA au chargement de la page
+  if (boutonIA.checked) {
+    startAIVsAI();
+  }
+};

@@ -473,10 +473,51 @@ function minimax(currentBoard, depth, maximizingPlayer) {
 
 
 
+function evaluate(currentBoard, currentPlayer) {
+    
+
+// Pour avoir la version de la fonction evaluate qui prends en compte la stratégie postionnelle. 
+const player = currentPlayer;
+const opponent = currentPlayer === 'o' ? 'u' : 'o';
 
 
+// Scores pour la stratégie positionnelle
+const cornerScore = 10;  // Score attribué aux coins
+const adjacentScore = 5; // Score attribué aux positions adjacentes aux coins
+
+// Calcul du score total
+let totalScore = 0;
+
+// Parcourez les coins du plateau
+const corners = [{ row: 0, col: 0 }, { row: 0, col: boardSize - 1 }, { row: boardSize - 1, col: 0 }, { row: boardSize - 1, col: boardSize - 1 }];
+for (const corner of corners) {
+  if (currentBoard[corner.row][corner.col] === player) {
+    totalScore += cornerScore;
+  } else if (currentBoard[corner.row][corner.col] === opponent) {
+    totalScore -= cornerScore;
+  }
+}
+
+// Parcourez les positions adjacentes aux coins
+const adjacentPositions = [
+  { row: 1, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 1 },
+  { row: 1, col: boardSize - 1 }, { row: 0, col: boardSize - 2 }, { row: 1, col: boardSize - 2 },
+  { row: boardSize - 2, col: 0 }, { row: boardSize - 1, col: 1 }, { row: boardSize - 2, col: 1 },
+  { row: boardSize - 2, col: boardSize - 1 }, { row: boardSize - 1, col: boardSize - 2 }, { row: boardSize - 2, col: boardSize - 2 },
+];
+
+for (const position of adjacentPositions) {
+  if (currentBoard[position.row][position.col] === player) {
+    totalScore += adjacentScore;
+  } else if (currentBoard[position.row][position.col] === opponent) {
+    totalScore -= adjacentScore;
+  }
+}
+
+return totalScore
 
 
+}
 
 
 

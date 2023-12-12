@@ -640,8 +640,6 @@ function getAvailableMoves(currentBoard, player) {
   // return totalScore;
 }
 
-
-
 function getAvailableMoves(currentBoard, currentPlayer) {
   const availableMoves = [];
 

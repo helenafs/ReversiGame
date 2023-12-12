@@ -636,7 +636,50 @@ function checkEndGame(currentBoard){
 
 }
 
+//Pour effectuer les test il faut décommenter cette partie.
+function runAITests(numGamesToPlay) {
+  const statistics = {
+    numGames: 0,
+    totalWinsBlack: 0,
+    totalWinsWhite: 0,
+    totalTime: 0,
+    movesByPlayer: { u: [], o: [] },
+  };
 
+  for (let i = 0; i < numGamesToPlay; i++) {
+    initializeBoard();
+
+    const startTime = performance.now();
+
+    handleAIVsAI();
+
+    const endTime = performance.now();
+    const gameDuration = endTime - startTime;
+    statistics.totalTime += gameDuration;
+
+    // Mesurez le nombre de coups dans chaque partie
+    const movesBlack = getMovesByPlayer('u', i + 1);
+    const movesWhite = getMovesByPlayer('o', i + 1);
+
+    statistics.movesByPlayer.u.push(movesBlack);
+    statistics.movesByPlayer.o.push(movesWhite);
+
+   
+
+    statistics.numGames++;
+
+    if (scoreBlack > scoreWhite) {
+      statistics.totalWinsBlack++;
+    } else if (scoreWhite > scoreBlack) {
+      statistics.totalWinsWhite++;
+    }
+  }
+
+
+  console.log('Statistiques des tests :', statistics);
+  console.table(statistics);
+  statistics.totalTime = 0;
+}
 
   // Initialiser le plateau au chargement de la page
 window.onload = initializeBoard;

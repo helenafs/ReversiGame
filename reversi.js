@@ -115,7 +115,8 @@ function updateStatus() {
     }
     updateUI();
   }
-
+  
+// Fonction pour gérer le mode humain vs humain 
   function handleHumanVsHuman(row, col) {
     if (isValidMove(row, col, currentBoard, currentPlayer)) {
       makeMove(row, col, currentBoard, currentPlayer);

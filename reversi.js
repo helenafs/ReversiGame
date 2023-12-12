@@ -697,5 +697,71 @@ function getWinner() {
 }
 
 
+// Pour effectuer les test il faut décommenter cette partie.
+function runAITests(numGamesToPlay) {
+  const statistics = {
+    numGames: 0,
+    totalWinsBlack: 0,
+    totalWinsWhite: 0,
+    totalTime: 0,
+    movesByPlayer: { u: [], o: [] },
+  };
+
+  for (let i = 0; i < numGamesToPlay; i++) {
+    initializeBoard();
+
+    const startTime = performance.now();
+
+    handleAIVsAI();
+
+    const endTime = performance.now();
+    const gameDuration = endTime - startTime;
+    statistics.totalTime += gameDuration;
+
+    // Mesurez le nombre de coups dans chaque partie
+    const movesBlack = getMovesByPlayer('u', i + 1);
+    const movesWhite = getMovesByPlayer('o', i + 1);
+
+    statistics.movesByPlayer.u.push(movesBlack);
+    statistics.movesByPlayer.o.push(movesWhite);
+
+   
+
+    statistics.numGames++;
+
+    if (scoreBlack > scoreWhite) {
+      statistics.totalWinsBlack++;
+    } else if (scoreWhite > scoreBlack) {
+      statistics.totalWinsWhite++;
+    }
+  }
+
+
+  console.log('Statistiques des tests :', statistics);
+  console.table(statistics);
+  statistics.totalTime = 0;
+}
+
+function getMovesByPlayer(currentPlayer, matchNumber) {
+  const moves = [];
+
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (currentBoard[i][j] === currentPlayer) {
+        const position = `${String.fromCharCode(97 + j)}${i + 1}`;
+        moves.push(position);
+      }
+    }
+  }
+
+  console.log(`Match ${matchNumber}: Joueur ${currentPlayer === 'u' ? 'Noir' : 'Blanc'}, liste des mouvements: `, moves);
+
+  return moves;
+}
+
+
+
+
+
   // Initialiser le plateau au chargement de la page
 window.onload = initializeBoard;

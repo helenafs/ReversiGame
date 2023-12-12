@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,14 +7,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reversi Game</title>
   <link rel="stylesheet" type="text/css" href="reversi.css">    
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="reversi.js"></script>
+
 
 </head>
 <body>
+  <audio id="iaVSia" loop>
+    <source src="/naruto.mp3" type="audio/mp3">
+  </audio>
+ 
+  <audio id="humainVSia" loop>
+    <source src="/yourname.mp3" type="audio/mp3">
+  </audio>
 
 <div class="container">
-  <h2>Reversi Game</h2>
+  <h2>Reversi</h2>
 
   <div class="options">
     <label>
@@ -24,15 +33,28 @@
     <label>
       <input type="radio" name="player" value="ia-ia"> Joueur IA vs Joueur IA
     </label>
+    <label>
+      Mode :
+      <select id="ai-mode">
+        <option value="random">IA Aléatoire</option>
+        <option value="minimax">IA Minimax</option>
+      </select>
+    </label>
+
   </div>
 
   <div class="status">
     <p>Joueur en cours : <span id="current-player">Noir</span></p>
-    <p>Score Noir : <span id="score-black">0</span></p>
-    <p>Score Blanc : <span id="score-white">0</span></p>
+    <p>Score Joeur Noir : <span id="score-black">0</span></p>
+    <p>Score Joeur Blanc : <span id="score-white">0</span></p>
   </div>
+  
+  <div id="game-message" class="game-message"></div>
+
+  <button id="newGameButton">Nouvelle Partie</button>
 
   <table id="board"></table>
+
 </div>
 
 

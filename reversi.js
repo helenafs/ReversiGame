@@ -669,27 +669,6 @@ function hasValidMoves(currentBoard, currentPlayer) {
 
 
 
-function getWinner() {
-  if(checkEndGame()){
-  if (scoreBlack > scoreWhite) {
-    alert('Le joueur Noir a gagné!', '', 'success');
-  } else if (scoreWhite > scoreBlack) {
-    alert('Le joueru Blanc a gagné!', '', 'success');
-  } else {
-    alert('Match nul!', '', 'info');
-  }
-}
-}
-
-
-
-
-
-
-
-
-
-
 
 function checkEndGame(currentBoard){ 
   for (let i = 0; i < boardSize; i++) {
@@ -704,6 +683,18 @@ function checkEndGame(currentBoard){
 
 }
 
+
+function getWinner() {
+  if(checkEndGame()){
+  if (scoreBlack > scoreWhite) {
+    alert('Le joueur Noir a gagné!', '', 'success');
+  } else if (scoreWhite > scoreBlack) {
+    alert('Le joueru Blanc a gagné!', '', 'success');
+  } else {
+    alert('Match nul!', '', 'info');
+  }
+}
+}
 
 
   // Initialiser le plateau au chargement de la page

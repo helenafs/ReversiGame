@@ -134,84 +134,98 @@ function updateStatus() {
     }
   }
   
-  function handleHumanVsAI(row, col) {
-    
-    // L'humain joue
-    if (isValidMove(row, col, currentBoard, currentPlayer)) {
-      // Si le coup de l'humain est valide, effectuer le mouvement
-      makeMove(row, col, currentBoard, currentPlayer);
-      updateUI();
+  let backgroundMusic;
+
+function handleHumanVsAI(row, col) {
+  // Pour lancer la musique
+  backgroundMusic = document.getElementById('humainVSia');
+  backgroundMusic.play();
+
   
-      // Vérifier si le jeu est terminé après le coup de l'humain
-      if (checkEndGame(currentBoard)) {
-        alert('Le jeu est terminé!', '', 'info');
-        getWinner();
-        stopBackgroundMusic();
-      } else {
-        // Passer au tour de l'IA après le coup de l'humain
-        currentPlayer = 'o';
-  
-        // Lancer le mouvement de l'IA après un délai
+  // L'humain joue
+  if (isValidMove(row, col, currentBoard, currentPlayer)) {
+    makeMove(row, col, currentBoard, currentPlayer);
+    updateUI();
+
+    if (checkEndGame(currentBoard)) {
+      document.getElementById('game-message').textContent = 'Le jeu est terminé!';     
+      getWinner();
+      stopBackgroundMusic();
+    } else {
+      currentPlayer = 'o';
+
+      // L'IA joue après la mise à jour du joueur actuel
         setTimeout(() => {
-          makeRandomAIMove(); // Appeler la fonction pour le mouvement de l'IA (Random ici)
-          updateUI();
-  
-          // Vérifier si le jeu est terminé après le coup de l'IA
-          if (checkEndGame(currentBoard)) {
-            alert('Le jeu est terminé!', '', 'info');
+        makeRandomAIMove();//pour mettre l'adversaire IA en mode MinMax il faut remplacer cette 
+        //ligne par celle ci: makeMinimaxAIMove(); 
+        updateUI();
+
+        if (checkEndGame(currentBoard)) {
+          document.getElementById('game-message').textContent = 'Le jeu est terminé!';      getWinner();
+          getWinner();
+          stopBackgroundMusic();
+            
+         
+        } else {
+          currentPlayer = 'u';
+          updateClickableCells();
+          highlightCurrentPlayerMoves();
+
+        
+
+          if (!hasValidMoves(currentBoard, currentPlayer)) {
+            alert('Le joueur Noir ne peut plus jouer. Le jeu est terminé!');
             getWinner();
             stopBackgroundMusic();
-          } else {
-            // Passer au tour de l'humain
-            currentPlayer = 'u';
-            updateClickableCells();
-            highlightCurrentPlayerMoves();
-  
-            // Vérifier si le joueur humain ne peut pas jouer
-            if (!hasValidMoves(currentBoard, currentPlayer)) {
-              alert('Le joueur Noir ne peut plus jouer. Le jeu est terminé!');
-              getWinner();
-            }
           }
-        }, 1200); // Ajout d'un délai avant que l'IA ne joue
-      }
-    } else {
-      // Si le coup de l'humain n'est pas valide, afficher une alerte
-      alert('Coup invalide. Veuillez réessayer.', '', 'error');
+        }
+      }, 1200); // Ajout d'un délai avant que l'IA ne joue
     }
+  } else {
+    alert('Coup invalide. Veuillez réessayer.', '', 'error');
   }
-  
-  let selectedAIMode = 'random';
+}
+
+let selectedAIMode = 'random';
 
 function handleAIVsAI(selectedAIMode) {
+  // Pour lancer la musique
+  const backgroundMusic = document.getElementById('iaVSia');
+  backgroundMusic.play();
 
-  const tempsEntreMouvements = 1300;
+  const delayBetweenMoves = 1000;
 
   const playNextMove = () => {
-    // Déterminer le type de mouvement à effectuer (Minimax ou Random)
     if (selectedAIMode === 'minimax') {
-      makeMinimaxAIMove(); // Appeler la fonction pour le mouvement de l'IA avec Minimax
+      makeMinimaxAIMove();
     } else {
-      makeRandomAIMove(); // Appeler la fonction pour le mouvement de l'IA aléatoire
+      makeRandomAIMove();
     }
 
     updateUI();
 
-    // Vérifier si le jeu est terminé après le coup de l'IA
     if (checkEndGame(currentBoard)) {
-      alert('Le jeu est terminé!', '', 'info');
+      document.getElementById('game-message').textContent = 'Le jeu est terminé!';    
       getWinner();
+      stopBackgroundMusic();
       updateClickableCells();
       highlightCurrentPlayerMoves();
     } else {
-      // Passer au tour de l'autre joueur
       currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
-      setTimeout(playNextMove, tempsEntreMouvements); // Appeler récursivement la fonction pour le mouvement suivant
+      setTimeout(playNextMove, delayBetweenMoves);
     }
   };
 
   // Commencez la séquence de mouvements
   playNextMove();
+}
+
+
+function stopBackgroundMusic() {
+  if(backgroundMusic){
+    backgroundMusic.pause();
+
+}
 }
 
 
@@ -387,7 +401,7 @@ function makeRandomAIMove() {
 
 // Fonction pour faire un mouvement avec l'IA Minimax
 function makeMinimaxAIMove() {
-  const depth = 10;
+  const depth = 4;
   const availableMoves = getAvailableMoves(currentBoard, currentPlayer);
 
   if (availableMoves.length > 0) {

@@ -384,6 +384,46 @@ function makeRandomAIMove() {
     const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
     makeMove(randomMove.row, randomMove.col, currentBoard, currentPlayer);
   }
+
+// Fonction pour faire un mouvement avec l'IA Minimax
+function makeMinimaxAIMove() {
+  const depth = 10;
+  const availableMoves = getAvailableMoves(currentBoard, currentPlayer);
+
+  if (availableMoves.length > 0) {
+    const bestMove = getBestMove(currentBoard, currentPlayer, depth);
+    makeMove(bestMove.row, bestMove.col, currentBoard, currentPlayer);
+  }
+}
+
+function getBestMove(currentBoard, currentPlayer, depth) {
+  let bestMove = null;
+  let bestScore = -Infinity;
+
+  const availableMoves = [];
+
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (isValidMove(i, j, currentBoard, currentPlayer)) {
+        availableMoves.push({ row: i, col: j });
+      }
+    }
+  }
+
+  for (const move of availableMoves) {
+    const tempBoard = JSON.parse(JSON.stringify(currentBoard));
+    makeMove(move.row, move.col, tempBoard, currentPlayer);
+    const score = minimax(tempBoard, depth, false);
+    
+    if (score > bestScore) {
+      bestScore = score;
+      bestMove = move;
+    }
+  }
+
+  return bestMove;
+}
+
 }
 
 

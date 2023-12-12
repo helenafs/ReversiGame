@@ -584,20 +584,19 @@ function getAvailableMoves(currentBoard, player) {
 
 
   function evaluate(currentBoard) { 
-    let score = 0;
+    // Version qui prends en compte la stratégie de mobilité. 
+  const player = currentPlayer;
+  const opponent = currentPlayer === 'o' ? 'u' : 'o';
 
-    // Parcourt toutes les cellules du plateau
-    for (let i = 0; i < boardSize; i++) {
-      for (let j = 0; j < boardSize; j++) {
-        // Incrémente le score pour chaque pièce 'o' (Blanc)
-        // Décrémente le score pour chaque pièce 'u' (Noir)
-        if (board[i][j] === 'o') {
-          score++;
-        } else if (board[i][j] === 'u') {
-          score--;
-        }
-      }
-  }
+  // Score pour la mobilité
+  const mobilityScore = 1;  // Score attribué pour chaque coup possible
+
+  // Évaluez la mobilité pour chaque joueur
+  const playerMobility = getAvailableMoves(currentBoard, player).length;
+  const opponentMobility = getAvailableMoves(currentBoard, opponent).length;
+
+  // Retournez la différence de mobilité (score de mobilité)
+  return (playerMobility - opponentMobility) * mobilityScore;
 } 
 
 

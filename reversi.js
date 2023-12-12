@@ -137,7 +137,7 @@ function handleHumanVsAI(row, col) {
     updateUI();
 
     if (checkEndGame(currentBoard)) {
-      document.getElementById('game-message').textContent = 'Le jeu est terminé!';      getWinner();
+      document.getElementById('game-message').textContent = 'Le jeu est terminé!';      
       stopBackgroundMusic();
     } else {
       currentPlayer = 'o';
@@ -148,7 +148,7 @@ function handleHumanVsAI(row, col) {
         updateUI();
 
         if (checkEndGame(currentBoard)) {
-          document.getElementById('game-message').textContent = 'Le jeu est terminé!';      getWinner();
+          document.getElementById('game-message').textContent = 'Le jeu est terminé!';      
           getWinner();
           stopBackgroundMusic();
             

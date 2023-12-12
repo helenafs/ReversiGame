@@ -583,7 +583,7 @@ function getAvailableMoves(currentBoard, player) {
 }
 
 
-  function evaluate(currentBoard) { 
+  function evaluate(currentBoard,currentPlayer) { 
     // Version qui prends en compte la stratégie de mobilité. 
   const player = currentPlayer;
   const opponent = currentPlayer === 'o' ? 'u' : 'o';
@@ -597,6 +597,74 @@ function getAvailableMoves(currentBoard, player) {
 
   // Retournez la différence de mobilité (score de mobilité)
   return (playerMobility - opponentMobility) * mobilityScore;
+
+  
+  // Pour avoir la version de la fonction evaluate qui prends en compte la stratégie postionnelle. 
+  // const player = currentPlayer;
+  // const opponent = currentPlayer === 'o' ? 'u' : 'o';
+
+
+  // // Scores pour la stratégie positionnelle
+  // const cornerScore = 10;  // Score attribué aux coins
+  // const adjacentScore = 5; // Score attribué aux positions adjacentes aux coins
+
+  // // Calcul du score total
+  // let totalScore = 0;
+
+  // // Parcourez les coins du plateau
+  // const corners = [{ row: 0, col: 0 }, { row: 0, col: boardSize - 1 }, { row: boardSize - 1, col: 0 }, { row: boardSize - 1, col: boardSize - 1 }];
+  // for (const corner of corners) {
+  //   if (currentBoard[corner.row][corner.col] === player) {
+  //     totalScore += cornerScore;
+  //   } else if (currentBoard[corner.row][corner.col] === opponent) {
+  //     totalScore -= cornerScore;
+  //   }
+  // }
+
+  // // Parcourez les positions adjacentes aux coins
+  // const adjacentPositions = [
+  //   { row: 1, col: 0 }, { row: 0, col: 1 }, { row: 1, col: 1 },
+  //   { row: 1, col: boardSize - 1 }, { row: 0, col: boardSize - 2 }, { row: 1, col: boardSize - 2 },
+  //   { row: boardSize - 2, col: 0 }, { row: boardSize - 1, col: 1 }, { row: boardSize - 2, col: 1 },
+  //   { row: boardSize - 2, col: boardSize - 1 }, { row: boardSize - 1, col: boardSize - 2 }, { row: boardSize - 2, col: boardSize - 2 },
+  // ];
+
+  // for (const position of adjacentPositions) {
+  //   if (currentBoard[position.row][position.col] === player) {
+  //     totalScore += adjacentScore;
+  //   } else if (currentBoard[position.row][position.col] === opponent) {
+  //     totalScore -= adjacentScore;
+  //   }
+  // }
+
+  // return totalScore;
+}
+
+
+
+function getAvailableMoves(currentBoard, currentPlayer) {
+  const availableMoves = [];
+
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (isValidMove(i, j, currentBoard, currentPlayer)) {
+        availableMoves.push({ row: i, col: j });
+      }
+    }
+  }
+
+  return availableMoves;
+}
+
+function hasValidMoves(currentBoard, currentPlayer) {
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (isValidMove(i, j, currentBoard, currentPlayer)) {
+        return true;
+      }
+    }
+  }
+  return false;
 } 
 
 

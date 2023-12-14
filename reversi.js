@@ -198,7 +198,7 @@ function handleAIVsAI(selectedAIMode) {
       stopBackgroundMusic();
       updateClickableCells();
       highlightCurrentPlayerMoves();
-    } else {
+    } else {//si le jeu n'est pas terminé le tour passe au joueur suivant
       currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
       setTimeout(playNextMove, delayBetweenMoves);
     }
@@ -208,23 +208,23 @@ function handleAIVsAI(selectedAIMode) {
   playNextMove();
 }
 
-
+//fonction pour arreter la musique de fond
 function stopBackgroundMusic() {
   if(backgroundMusic){
     backgroundMusic.pause();
 
 }
 }
-
+//mise a jour de cellules cliquables 
 function updateClickableCells() {
-  const allCells = document.querySelectorAll('td');
-  allCells.forEach(cell => cell.classList.remove('highlight'));
+  const allCells = document.querySelectorAll('td');//sélectionne toutes les cellules du jeu
+  allCells.forEach(cell => cell.classList.remove('highlight'));//parcours de cellules
 
   for (let i = 0; i < boardSize; i++) {
     for (let j = 0; j < boardSize; j++) {
       const cell = document.querySelector(`#board tr:nth-child(${i + 1}) td:nth-child(${j + 1})`);
       if (isValidMove(i, j, currentBoard, currentPlayer)) {
-        cell.classList.add('highlight');
+        cell.classList.add('highlight');//si le mouvement est valide la cellule devient 'highlighted'
       }
     }
   }
@@ -235,10 +235,10 @@ function highlightCurrentPlayerMoves() {
   // console.log(`Highlighting moves for player ${currentPlayer}`);
   const currentPlayerMoves = [];
 
-  for (let i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i++) {//parcours des cellules 
     for (let j = 0; j < boardSize; j++) {
       if (isValidMove(i, j, currentBoard, currentPlayer)) {
-        currentPlayerMoves.push({ row: i, col: j });
+        currentPlayerMoves.push({ row: i, col: j });//si le mouvement est valide il y a un ajout de la position a la liste currentPlayerMoves
       }
     }
   }
@@ -251,56 +251,56 @@ function highlightCurrentPlayerMoves() {
   const existingCircles = document.querySelectorAll('.circle');
   existingCircles.forEach(circle => circle.remove());
 
-  currentPlayerMoves.forEach(move => {
+  currentPlayerMoves.forEach(move => {//parcours de la liste currentPlayerMoves
     const cell = boardElement.rows[move.row].cells[move.col];
 
     const circleDiv = document.createElement('div');
     circleDiv.className = 'circle';
 
-    cell.appendChild(circleDiv);
+    cell.appendChild(circleDiv);//pour chaque position valide un élément cercle est crée
   });
 }
 
-
+//Vérifie si un mouvement est valide pour un joueur donné à une position spécifique sur le plateau 
 function isValidMove(row, col, currentBoard, currentPlayer) {
   if (row < 0 || row >= boardSize || col < 0 || col >= boardSize || currentBoard[row][col] !== 'v') {
-    return false;
+    return false;//Vérifie si la position est en dehors des limites du plateau ou si la cellule n'est pas vide ('v')
   }
-
+//Liste des directions possibles pour vérifier les pièces adverses dans toutes les directions, 8 possibles
   const directions = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]];
-
+// Parcourt chaque direction pour vérifier la validité du mouvement
   for (const [dr, dc] of directions) {
     let r = row + dr;
     let c = col + dc;
     let foundOpponentPiece = false;
-
+// Parcourt les cases dans la direction spécifiée dans les limites du tableau
     while (r >= 0 && r < boardSize && c >= 0 && c < boardSize) {
-      if (currentBoard[r][c] === currentPlayer) {
+      if (currentBoard[r][c] === currentPlayer) {// Si une pièce du joueur est trouvée après une pièce adverse, le mouvement est valide
         if (foundOpponentPiece) {
           return true;
-        } else {
+        } else {// Si la première pièce rencontrée est du joueur actuel, on arrête la recherche dans cette direction
           break;
         }
-      } else if (currentBoard[r][c] === 'v') {
+      } else if (currentBoard[r][c] === 'v') {// Si une case vide est rencontrée, le mouvement n'est pas valide dans cette direction
         break;
-      } else {
+      } else {// Si une pièce adverse est trouvée, on marque qu'une pièce adverse a été trouvée
         foundOpponentPiece = true;
       }
-
+// Déplace la position dans la direction spécifiée
       r += dr;
       c += dc;
     }
   }
-
+// Si aucune direction n'a rendu le mouvement valide, retourne false
   return false;
 }
 
-function makeMove(row, col, currentBoard, currentPlayer) {
+function makeMove(row, col, currentBoard, currentPlayer) {//responsable pour effectuer un mouvement pour un joueur 
   console.log(`Making move at (${row}, ${col}) for player ${currentPlayer}`);
-  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]];
+  const directions = [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, -1], [1, -1], [-1, 1]];//tableau avec les 8 directions possibles 
 
-  for (const [dr, dc] of directions) {
-    let r = row + dr;
+  for (const [dr, dc] of directions) {//recherche des pièces à retourner dans chaque direction
+    let r = row + dr; //verification de cellules adjacentes
     let c = col + dc;
     let foundOpponentPiece = false;
 
@@ -335,9 +335,9 @@ function makeMove(row, col, currentBoard, currentPlayer) {
   updateScore();
 }
 
-
+//parcours du plateau du jeu pour compter les pièces noires et blanches
 function updateScore() {
-  let countBlack = 0;
+  let countBlack = 0;//initialisation de compteurs
   let countWhite = 0;
 
   for (let i = 0; i < boardSize; i++) {
@@ -349,35 +349,34 @@ function updateScore() {
       }
     }
   }
-
+//mise à jour d'scores globaux 
   scoreBlack = countBlack;
   scoreWhite = countWhite;
 }
 
 // Fonction pour faire un mouvement aléatoire
 function makeRandomAIMove() {
-  const availableMoves = getAvailableMoves(currentBoard, currentPlayer);
+  const availableMoves = getAvailableMoves(currentBoard, currentPlayer);//fonction getAvailableMoves pour voir les mouvements disponibles sur le plateau
 
-  if (availableMoves.length > 0) {
+  if (availableMoves.length > 0) {//si il y a des mouvements disponibles sélectionne aléatoirement un mouvement disponible
     const randomMove = availableMoves[Math.floor(Math.random() * availableMoves.length)];
     makeMove(randomMove.row, randomMove.col, currentBoard, currentPlayer);
   }
 }
 
-
-// Fonction pour faire un mouvement avec l'IA Minimax
+// Fonction pour faire un mouvement avec l'IA MinMax
 function makeMinimaxAIMove() {
-  const depth = 4;
+  const depth = 4;//profondeur de l'exploration des mouvements minmax
   // Version alpha beta
   // const alpha = -Infinity; // Initialisez alpha
   // const beta = Infinity; // Initialisez beta
   // const minimaxResult = minimax(currentBoard, depth, alpha, beta, currentPlayer);
   const minimaxResult = minimax(currentBoard, depth, currentPlayer);
 
-  if (minimaxResult.move) {
+  if (minimaxResult.move) {//si minimaxResult.move est défini cela signifie qu'il y a un mouvement valide à effectuer
     const minmaxMove = minimaxResult.move;
-    makeMove(minmaxMove.row, minmaxMove.col, currentBoard, currentPlayer);
-  } else {
+    makeMove(minmaxMove.row, minmaxMove.col, currentBoard, currentPlayer);//mouvement correspondant effectué
+  } else {//sinon erreur
     console.error("Pas de mouvement valide trouvé par l'algorithme Minmax");
   }
 }
@@ -386,7 +385,7 @@ function makeMinimaxAIMove() {
 
 // Fonction principale de l'algorithme minimax
 function minimax(currentBoard, depth, maximizingPlayer) {
-  if (depth === 0 || checkEndGame(currentBoard)) {
+  if (depth === 0 || checkEndGame(currentBoard)) {//profondeur maximale de recherche est atteinte ou le jeu est fini
     const evaluation = evaluate(currentBoard, currentPlayer);
     console.log(`Profondeur: ${depth}, Evaluation: ${evaluation}`);
     return { score: evaluation, move: null };
@@ -420,7 +419,7 @@ function minimax(currentBoard, depth, maximizingPlayer) {
       }
     }
   }
-
+//affiche dans le console les mouvements vérifiés, les scores obtenus et le meilleur mouvement identifié
   console.log(`Best move: ${bestMove ? `(${bestMove.row}, ${bestMove.col})` : 'null'}, Best score: ${bestScore}`);
   return { score: bestScore, move: bestMove };
 }
@@ -542,44 +541,44 @@ function evaluate(currentBoard, currentPlayer) {
 }
 
 
-
+//voir le mouvements disponibles sur le plateau du jeu 
 function getAvailableMoves(currentBoard, currentPlayer) {
   const availableMoves = [];
 
-  for (let i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i++) {//parcours du plateau
     for (let j = 0; j < boardSize; j++) {
-      if (isValidMove(i, j, currentBoard, currentPlayer)) {
+      if (isValidMove(i, j, currentBoard, currentPlayer)) {//s'il y a un mouvement disponible lui ajouter au tableau availableMoves
         availableMoves.push({ row: i, col: j });
       }
     }
   }
 
-  return availableMoves;
+  return availableMoves;//retour du tableau
 }
-
+//determine si il y a des mouvements valides pour le joueur actuel
 function hasValidMoves(currentBoard, currentPlayer) {
   for (let i = 0; i < boardSize; i++) {
     for (let j = 0; j < boardSize; j++) {
       if (isValidMove(i, j, currentBoard, currentPlayer)) {
-        return true;
+        return true;//si dans la position i,j il y a un mouvement valide retourne vrai
       }
     }
   }
-  return false;
+  return false;//sinon retourne faux
 }
 
-
+//détérmine si le jeu est terminé
 function checkEndGame(currentBoard) {
-  for (let i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i++) {//parcours du plateau
     for (let j = 0; j < boardSize; j++) {
       if (isValidMove(i, j, currentBoard, 'u') || isValidMove(i, j, currentBoard, 'o')) {
         return false;
       }
     }
   }
-  return true;
+  return true;//si les mouvements valides n'existent plus le jeu est terminé
 }
-
+//recherche le score plus haut pour definir le vainqueur
 function getWinner() {
   if (scoreBlack > scoreWhite) {
     alert('Le joueur Noir a gagné!', '', 'success');
@@ -590,71 +589,71 @@ function getWinner() {
   }
 }
 
-// Pour effectuer les test il faut dé commenter cette partie.
+// Pour effectuer les test il faut décommenter cette partie.
 function runAITests(numGamesToPlay) {
   const statistics = {
-    numGames: 0,
-    totalWinsBlack: 0,
-    totalWinsWhite: 0,
-    totalTime: 0,
-    movesByPlayer: { u: [], o: [] },
+    numGames: 0,//nombre total de parties
+    totalWinsBlack: 0,//nombre de victoires blanc
+    totalWinsWhite: 0,//nombre de victoires noir
+    totalTime: 0,//le temps total du test
+    movesByPlayer: { u: [], o: [] },//les mouvements de chaque joueur
   };
 
-  for (let i = 0; i < numGamesToPlay; i++) {
+  for (let i = 0; i < numGamesToPlay; i++) {//boucle le jeu 
     initializeBoard();
 
-    const startTime = performance.now();
+    const startTime = performance.now();//enregistre le début de la partie
 
-    handleAIVsAI();
+    handleAIVsAI();//jeu d'une IA vs IA 
 
-    const endTime = performance.now();
-    const gameDuration = endTime - startTime;
-    statistics.totalTime += gameDuration;
+    const endTime = performance.now();//le fin de la partie
+    const gameDuration = endTime - startTime;//temps de jeu
+    statistics.totalTime += gameDuration;//ajoute de temps de chaque partie au temps total
 
     // Mesurez le nombre de coups dans chaque partie
-    const movesBlack = getMovesByPlayer('u', i + 1);
-    const movesWhite = getMovesByPlayer('o', i + 1);
+    const movesBlack = getMovesByPlayer('u', i + 1);//mouvements du blanc
+    const movesWhite = getMovesByPlayer('o', i + 1);//mouvements du noir
 
-    statistics.movesByPlayer.u.push(movesBlack);
-    statistics.movesByPlayer.o.push(movesWhite);
+    statistics.movesByPlayer.u.push(movesBlack);//ajout dans le tableau movesByPlayer
+    statistics.movesByPlayer.o.push(movesWhite);//ajout dans le tableau movesByPlayer
 
    
 
-    statistics.numGames++;
+    statistics.numGames++; //ajout un jeu à chaque boucle
 
     if (scoreBlack > scoreWhite) {
-      statistics.totalWinsBlack++;
+      statistics.totalWinsBlack++;//si le noir a gagné augmente ses victoires
     } else if (scoreWhite > scoreBlack) {
-      statistics.totalWinsWhite++;
+      statistics.totalWinsWhite++;//si le blanc a gagné augmente ses victoires
     }
   }
 
 
-  console.log('Statistiques des tests :', statistics);
-  console.table(statistics);
-  statistics.totalTime = 0;
+  console.log('Statistiques des tests :', statistics);//affiche les statistiques sur la console du browser
+  console.table(statistics);//fait une table avec les statistiques
+  statistics.totalTime = 0;//remets le temps a 0 
 }
-
+//fonction pour récupérer et afficher la liste de mouvements effectués par un joueur
 function getMovesByPlayer(currentPlayer, matchNumber) {
-  const moves = [];
+  const moves = [];//tableau avec les mouvements
 
-  for (let i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i++) {//parcours du plateau
     for (let j = 0; j < boardSize; j++) {
-      if (currentBoard[i][j] === currentPlayer) {
-        const position = `${String.fromCharCode(97 + j)}${i + 1}`;
+      if (currentBoard[i][j] === currentPlayer) {//si une pièce du joueur est trouvée à la position i,j
+        const position = `${String.fromCharCode(97 + j)}${i + 1}`;//la position est converti en une notation de mouvement
         moves.push(position);
       }
     }
   }
-
+//affichage de la liste de mouvements dans la console du browser 
   console.log(`Match ${matchNumber}: Joueur ${currentPlayer === 'u' ? 'Noir' : 'Blanc'}, liste des mouvements: `, moves);
 
   return moves;
 }
 
-
+//initialisation au chargement de la page
 window.onload = function () {
-  initializeBoard();
+  initializeBoard();//initialise le plateau du jeu
 
   // Fonction pour démarrer le jeu en mode IA vs IA avec le mode sélectionné
   function startAIVsAI() {
@@ -669,7 +668,7 @@ window.onload = function () {
    } else if (selectedAIMode === 'minimax') {
      numGames = 100;
    }
-
+//lancer 1000 tests d'IA 
    runAITests(numGames);
    }
   
@@ -697,7 +696,7 @@ window.onload = function () {
       // Utilisez la fonction dédiée pour démarrer le jeu en mode IA vs IA
       startAIVsAI();
     } else {
-      // Ajoutez des conditions pour les autres modes si nécessaire
+      
       updateUI(); // Ajoutez cette ligne pour mettre à jour l'interface utilisateur après la réinitialisation du plateau
     }
   });

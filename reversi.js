@@ -193,8 +193,7 @@ function handleAIVsAI(selectedAIMode) {
 
     if (checkEndGame(currentBoard)) {
       document.getElementById('game-message').textContent = 'Le jeu est terminé!';    
-      getWinner();
-      getWinner();
+      // getWinner();
       stopBackgroundMusic();
       updateClickableCells();
       highlightCurrentPlayerMoves();
@@ -367,26 +366,13 @@ function makeRandomAIMove() {
 
 // Fonction pour faire un mouvement avec l'IA Minimax
 function makeMinimaxAIMove() {
-  const depth = 8;
-  const alpha = -Infinity; // Initialisez alpha
-  const beta = Infinity; // Initialisez beta
-  const minimaxResult = minimax(currentBoard, depth, alpha, beta, currentPlayer);
-  
-  if (minimaxResult.move) {
-    const minmaxMove = minimaxResult.move;
-    makeMove(minmaxMove.row, minmaxMove.col, currentBoard, currentPlayer);
-  } else {
-    console.error("Pas de mouvement valide trouvé par l'algorithme Minmax");
-  }
-}
-
-
-
-// Fonction pour faire un mouvement avec l'IA Minimax
-function makeMinimaxAIMove() {
   const depth = 4;
-  const minimaxResult = minimax(currentBoard, depth,alpha,beta,currentPlayer);
-  
+  // Version alpha beta
+  // const alpha = -Infinity; // Initialisez alpha
+  // const beta = Infinity; // Initialisez beta
+  // const minimaxResult = minimax(currentBoard, depth, alpha, beta, currentPlayer);
+  const minimaxResult = minimax(currentBoard, depth, currentPlayer);
+
   if (minimaxResult.move) {
     const minmaxMove = minimaxResult.move;
     makeMove(minmaxMove.row, minmaxMove.col, currentBoard, currentPlayer);
@@ -394,6 +380,8 @@ function makeMinimaxAIMove() {
     console.error("Pas de mouvement valide trouvé par l'algorithme Minmax");
   }
 }
+
+
 
 // Fonction principale de l'algorithme minimax
 function minimax(currentBoard, depth, maximizingPlayer) {
@@ -602,66 +590,66 @@ function getWinner() {
 }
 
 // Pour effectuer les test il faut dé commenter cette partie.
-// function runAITests(numGamesToPlay) {
-//   const statistics = {
-//     numGames: 0,
-//     totalWinsBlack: 0,
-//     totalWinsWhite: 0,
-//     totalTime: 0,
-//     movesByPlayer: { u: [], o: [] },
-//   };
+function runAITests(numGamesToPlay) {
+  const statistics = {
+    numGames: 0,
+    totalWinsBlack: 0,
+    totalWinsWhite: 0,
+    totalTime: 0,
+    movesByPlayer: { u: [], o: [] },
+  };
 
-//   for (let i = 0; i < numGamesToPlay; i++) {
-//     initializeBoard();
+  for (let i = 0; i < numGamesToPlay; i++) {
+    initializeBoard();
 
-//     const startTime = performance.now();
+    const startTime = performance.now();
 
-//     handleAIVsAI();
+    handleAIVsAI();
 
-//     const endTime = performance.now();
-//     const gameDuration = endTime - startTime;
-//     statistics.totalTime += gameDuration;
+    const endTime = performance.now();
+    const gameDuration = endTime - startTime;
+    statistics.totalTime += gameDuration;
 
-//     // Mesurez le nombre de coups dans chaque partie
-//     const movesBlack = getMovesByPlayer('u', i + 1);
-//     const movesWhite = getMovesByPlayer('o', i + 1);
+    // Mesurez le nombre de coups dans chaque partie
+    const movesBlack = getMovesByPlayer('u', i + 1);
+    const movesWhite = getMovesByPlayer('o', i + 1);
 
-//     statistics.movesByPlayer.u.push(movesBlack);
-//     statistics.movesByPlayer.o.push(movesWhite);
+    statistics.movesByPlayer.u.push(movesBlack);
+    statistics.movesByPlayer.o.push(movesWhite);
 
    
 
-//     statistics.numGames++;
+    statistics.numGames++;
 
-//     if (scoreBlack > scoreWhite) {
-//       statistics.totalWinsBlack++;
-//     } else if (scoreWhite > scoreBlack) {
-//       statistics.totalWinsWhite++;
-//     }
-//   }
+    if (scoreBlack > scoreWhite) {
+      statistics.totalWinsBlack++;
+    } else if (scoreWhite > scoreBlack) {
+      statistics.totalWinsWhite++;
+    }
+  }
 
 
-//   console.log('Statistiques des tests :', statistics);
-//   console.table(statistics);
-//   statistics.totalTime = 0;
-// }
+  console.log('Statistiques des tests :', statistics);
+  console.table(statistics);
+  statistics.totalTime = 0;
+}
 
-// function getMovesByPlayer(currentPlayer, matchNumber) {
-//   const moves = [];
+function getMovesByPlayer(currentPlayer, matchNumber) {
+  const moves = [];
 
-//   for (let i = 0; i < boardSize; i++) {
-//     for (let j = 0; j < boardSize; j++) {
-//       if (currentBoard[i][j] === currentPlayer) {
-//         const position = `${String.fromCharCode(97 + j)}${i + 1}`;
-//         moves.push(position);
-//       }
-//     }
-//   }
+  for (let i = 0; i < boardSize; i++) {
+    for (let j = 0; j < boardSize; j++) {
+      if (currentBoard[i][j] === currentPlayer) {
+        const position = `${String.fromCharCode(97 + j)}${i + 1}`;
+        moves.push(position);
+      }
+    }
+  }
 
-//   console.log(`Match ${matchNumber}: Joueur ${currentPlayer === 'u' ? 'Noir' : 'Blanc'}, liste des mouvements: `, moves);
+  console.log(`Match ${matchNumber}: Joueur ${currentPlayer === 'u' ? 'Noir' : 'Blanc'}, liste des mouvements: `, moves);
 
-//   return moves;
-// }
+  return moves;
+}
 
 
 window.onload = function () {
@@ -674,14 +662,14 @@ window.onload = function () {
     handleAIVsAI(selectedAIMode);
   
   //  Pour les test il faut aussi décommenter cette partie, il est possible d'ajuster le nombre de parties que l'on veut tester. 
-  //  let numGames;
-  //  if (selectedAIMode === 'random') {
-  //    numGames = 1000;
-  //  } else if (selectedAIMode === 'minimax') {
-  //    numGames = 1000;
-  //  }
+   let numGames;
+   if (selectedAIMode === 'random') {
+     numGames = 1000;
+   } else if (selectedAIMode === 'minimax') {
+     numGames = 100;
+   }
 
-  //  runAITests(numGames);
+   runAITests(numGames);
    }
   
 

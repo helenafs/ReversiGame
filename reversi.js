@@ -1,30 +1,30 @@
 
-const boardSize = 8;
+const boardSize = 8; //taille du plateau 8 x 8
 let currentBoard = Array.from({ length: boardSize }, () => Array(boardSize).fill('v'));
 let currentPlayer = 'u'; // 'u' pour Noir, 'o' pour Blanc
-let scoreBlack = 0;
-let scoreWhite = 0;
+let scoreBlack = 0; //score initial 
+let scoreWhite = 0; //score initial 
 
 const CellColors = {
   pair: 'green',        // Couleur pour les cases paires.
   impair: 'darkgreen',  // Couleur pour les cases impaires.
 };
 
-
+//initialiser le tableau du jeu
 function initializeBoard() {
-  const boardElement = document.getElementById('board');
+  const boardElement = document.getElementById('board'); //appel a la table "board dans l'html"
   boardElement.innerHTML = '';
 
   for (let i = 0; i < boardSize; i++) {
-    const row = document.createElement('tr');
+    const row = document.createElement('tr'); //créer les lignes
     for (let j = 0; j < boardSize; j++) {
-      const cell = document.createElement('td');
+      const cell = document.createElement('td'); //créer les cellules 
       
       
-      cell.addEventListener('click', () => handleCellClick(i, j));
+      cell.addEventListener('click', () => handleCellClick(i, j)); //"écouter" d'evénements à chaque cellule
 
       const color = (i + j) % 2 === 0 ? CellColors.pair : CellColors.impair;
-      cell.style.backgroundColor = color;
+      cell.style.backgroundColor = color; //alternance de couleurs en fonction de position
 
      
 
@@ -39,25 +39,26 @@ function initializeBoard() {
   currentBoard[4][3] = 'u';
   currentBoard[4][4] = 'o';
 
+  // mise à jour du tableau et du statut 
   updateBoardVisual();
   highlightCurrentPlayerMoves(); 
   updateStatus();
 }
 
 
-
+// mise a jour de l'affichage du tableau
 function updateBoardVisual() {
   const boardElement = document.getElementById('board');
-  for (let i = 0; i < boardSize; i++) {
+  for (let i = 0; i < boardSize; i++) {//parcourir le tableau
     for (let j = 0; j < boardSize; j++) {
       const cell = boardElement.rows[i].cells[j];
       cell.innerHTML = '';
 
-      if (currentBoard[i][j] === 'u') {
+      if (currentBoard[i][j] === 'u') { //creer une div pour les pièces noires
         const piece = document.createElement('div');
         piece.className = 'piece black';
         cell.appendChild(piece);
-      } else if (currentBoard[i][j] === 'o') {
+      } else if (currentBoard[i][j] === 'o') { //creer une div pour les pièces blanches
         const piece = document.createElement('div');
         piece.className = 'piece white';
         cell.appendChild(piece);
@@ -65,29 +66,29 @@ function updateBoardVisual() {
     }
   }
 }
-
+//mise a jour du joueur en question et son score
 function updateStatus() {
-  const currentPlayerSpan = document.getElementById('current-player');
-  currentPlayerSpan.textContent = currentPlayer === 'u' ? 'Noir' : 'Blanc';
+  const currentPlayerSpan = document.getElementById('current-player'); //obtient l'span pour le joeur actuel
+  currentPlayerSpan.textContent = currentPlayer === 'u' ? 'Noir' : 'Blanc'; //met à jour le texte du joueur actuel en fonction de currentPlayer
 
-  const scoreBlackSpan = document.getElementById('score-black');
-  scoreBlackSpan.textContent = scoreBlack;
+  const scoreBlackSpan = document.getElementById('score-black');//span du joueur noir
+  scoreBlackSpan.textContent = scoreBlack; //mise à jour de son score 
 
-  const scoreWhiteSpan = document.getElementById('score-white');
-  scoreWhiteSpan.textContent = scoreWhite;
+  const scoreWhiteSpan = document.getElementById('score-white');//span du joueur blanc
+  scoreWhiteSpan.textContent = scoreWhite;//mise  à jour de son score
 }
-
+//update l'interface utilisateur 
 function updateUI() {
   updateBoardVisual();
   updateStatus();
   updateClickableCells();
   highlightCurrentPlayerMoves();
 }
-
+//appelee quand un user clique sur une cellule du plateau de jeu
 function handleCellClick(row, col) {
   const highlightedCells = document.querySelectorAll('.highlight');
   highlightedCells.forEach(cell => cell.classList.remove('highlight'));
-
+//verifie le mode du jeu
   if (document.querySelector('input[name="player"]:checked').value === 'humain-humain') {
     // Mode Humain vs Humain
     handleHumanVsHuman(row, col);
@@ -104,27 +105,27 @@ function handleCellClick(row, col) {
 function displayGameMessage(message) {
   document.getElementById('game-message').textContent = message;
 }
-
+//gérer le mode humain vs humain
 function handleHumanVsHuman(row, col) {
-  if (isValidMove(row, col, currentBoard, currentPlayer)) {
+  if (isValidMove(row, col, currentBoard, currentPlayer)) {//verifie si le coup est valide
     makeMove(row, col, currentBoard, currentPlayer);
-    updateBoardVisual();
-    updateStatus();
+    updateBoardVisual();//update le tableau
+    updateStatus();//update l'status du jeu
 
     if (checkEndGame(currentBoard)) {
       document.getElementById('game-message').textContent = 'Le jeu est terminé!';      getWinner(); 
-    } else {
+    } else {//si le jeu n'est pas terminé le tour change de joueur
       currentPlayer = currentPlayer === 'u' ? 'o' : 'u';
-      updateClickableCells();
+      updateClickableCells();//met à jour les cellules cliquables pour le prochain joueur
       highlightCurrentPlayerMoves();
     }
   } else {
     alert('Coup invalide. Veuillez réessayer.', '', 'error');
   }
 }
-
+//définir la musique de fond
 let backgroundMusic;
-
+//gérer le mode humain vs IA 
 function handleHumanVsAI(row, col) {
   // Pour lancer la musique
   backgroundMusic = document.getElementById('humainVSia');
@@ -144,7 +145,7 @@ function handleHumanVsAI(row, col) {
 
       // L'IA joue après la mise à jour du joueur actuel
         setTimeout(() => {
-        makeRandomAIMove();
+        makeRandomAIMove();//IA joue avec un mouvement aleatoire 
         updateUI();
 
         if (checkEndGame(currentBoard)) {
@@ -172,23 +173,23 @@ function handleHumanVsAI(row, col) {
     alert('Coup invalide. Veuillez réessayer.', '', 'error');
   }
 }
-
+//variable qu'stocke le mode IA sélectionné pour jouer
 let selectedAIMode = 'random';
-
+//gère le mode de IA vs IA 
 function handleAIVsAI(selectedAIMode) {
   // Pour lancer la musique
   const backgroundMusic = document.getElementById('iaVSia');
   backgroundMusic.play();
 
-  const delayBetweenMoves = 1000;
-
+  const delayBetweenMoves = 1000; //delay entre les mouvements de l'IA
+  //constant pour gérer la séquence de mouvements des IA
   const playNextMove = () => {
     if (selectedAIMode === 'minimax') {
       makeMinimaxAIMove();
     } else {
       makeRandomAIMove();
     }
-
+    //mise à jour de l'interface
     updateUI();
 
     if (checkEndGame(currentBoard)) {

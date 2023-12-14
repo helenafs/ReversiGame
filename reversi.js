@@ -127,8 +127,8 @@ let backgroundMusic;
 
 function handleHumanVsAI(row, col) {
   // Pour lancer la musique
-  backgroundMusic = document.getElementById('humainVSia');
-  backgroundMusic.play();
+  // backgroundMusic = document.getElementById('humainVSia');
+  // backgroundMusic.play();
 
   
   // L'humain joue
@@ -177,8 +177,8 @@ let selectedAIMode = 'random';
 
 function handleAIVsAI(selectedAIMode) {
   // Pour lancer la musique
-  const backgroundMusic = document.getElementById('iaVSia');
-  backgroundMusic.play();
+  // const backgroundMusic = document.getElementById('iaVSia');
+  // backgroundMusic.play();
 
   const delayBetweenMoves = 1000;
 

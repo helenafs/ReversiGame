@@ -7,7 +7,7 @@ Lors du développement de notre jeu de plateau Reversi, la question essentielle 
 
 
 # Régles du Jeu 
-Lien vers la page officielle de la Fédération Française d'Othello
+Lien vers la page officielle de la Fédération Française d'Othello : 
 https://www.ffothello.org/othello/regles-du-jeu/
 
 # Test

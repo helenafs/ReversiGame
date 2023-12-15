@@ -54,6 +54,7 @@ function updateBoardVisual() {
       const cell = boardElement.rows[i].cells[j];
       cell.innerHTML = '';
 
+
       if (currentBoard[i][j] === 'u') { //creer une div pour les pièces noires
         const piece = document.createElement('div');
         piece.className = 'piece black';
@@ -372,11 +373,13 @@ function makeMinimaxAIMove() {
   // const beta = Infinity; // Initialisez beta
   // const minimaxResult = minimax(currentBoard, depth, alpha, beta, currentPlayer);
   const minimaxResult = minimax(currentBoard, depth, currentPlayer);
-
-  if (minimaxResult.move) {//si minimaxResult.move est défini cela signifie qu'il y a un mouvement valide à effectuer
+  
+  //si minimaxResult.move est défini cela signifie qu'il y a un mouvement valide à effectuer
+  if (minimaxResult.move) {
     const minmaxMove = minimaxResult.move;
     makeMove(minmaxMove.row, minmaxMove.col, currentBoard, currentPlayer);//mouvement correspondant effectué
-  } else {//sinon erreur
+  } else {
+    //sinon erreur
     console.error("Pas de mouvement valide trouvé par l'algorithme Minmax");
   }
 }
@@ -385,8 +388,11 @@ function makeMinimaxAIMove() {
 
 // Fonction principale de l'algorithme minimax
 function minimax(currentBoard, depth, maximizingPlayer) {
-  if (depth === 0 || checkEndGame(currentBoard)) {//profondeur maximale de recherche est atteinte ou le jeu est fini
+    // Si la profondeur maximale de recherche est atteinte ou le jeu est fini
+  if (depth === 0 || checkEndGame(currentBoard)) {
+    // Évalue la position actuelle du plateau
     const evaluation = evaluate(currentBoard, currentPlayer);
+    // Affiche des informations de débogage sur la profondeur et l'évaluation
     console.log(`Profondeur: ${depth}, Evaluation: ${evaluation}`);
     return { score: evaluation, move: null };
   }
@@ -396,14 +402,15 @@ function minimax(currentBoard, depth, maximizingPlayer) {
   const opponent = maximizingPlayer ? 'u' : 'o';
 
   const availableMoves = getAvailableMoves(currentBoard, currentPlayer);
-
+  
+  // Initialise le meilleur mouvement et le meilleur score en fonction du joueur maximisant
   let bestMove = availableMoves[0]; 
   let bestScore = maximizingPlayer ? -Infinity : Infinity;
 
   // Parcourt tous les mouvements possibles
   for (const move of availableMoves) {
     console.log(`Checking move at (${move.row}, ${move.col})`);
-    // Copie le plateau pour simuler le mouvement
+     // Copie le plateau pour simuler le mouvement sans affecter le plateau actuel
     const tempBoard = JSON.parse(JSON.stringify(currentBoard));
     // Effectue le mouvement sur la copie du plateau
     if (makeMove(move.row, move.col, tempBoard, maximizingPlayer ? player : opponent)) {
@@ -419,8 +426,9 @@ function minimax(currentBoard, depth, maximizingPlayer) {
       }
     }
   }
-//affiche dans le console les mouvements vérifiés, les scores obtenus et le meilleur mouvement identifié
+  //affiche dans le console les mouvements vérifiés, les scores obtenus et le meilleur mouvement identifié
   console.log(`Best move: ${bestMove ? `(${bestMove.row}, ${bestMove.col})` : 'null'}, Best score: ${bestScore}`);
+    // Retourne le meilleur score et le meilleur mouvement associés
   return { score: bestScore, move: bestMove };
 }
 
